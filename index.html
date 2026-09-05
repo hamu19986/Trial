@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- STREAMING_CHUNK:Initializing HTML skeleton and CDN links... -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mechanical Engineering First Year | Self-Study Platform</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for Formulas -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Custom Tailwind Configuration & CSS -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { primary: '#1e40af', secondary: '#047857', dark: '#0f172a' }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* STREAMING_CHUNK:Styling layout and custom animations... */
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; overflow-x: hidden; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Content Styling */
+        .content-area h1 { font-size: 2rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+        .content-area h2 { font-size: 1.5rem; font-weight: 600; color: #1e40af; margin-top: 2rem; margin-bottom: 1rem; }
+        .content-area h3 { font-size: 1.25rem; font-weight: 600; color: #334155; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .content-area p { margin-bottom: 1rem; line-height: 1.7; }
+        .content-area ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+        .content-area ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; }
+        .content-area li { margin-bottom: 0.5rem; line-height: 1.6; }
+        .content-area table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 0.5rem; overflow: hidden; }
+        .content-area th, .content-area td { border: 1px solid #e2e8f0; padding: 0.75rem; text-align: left; }
+        .content-area th { background-color: #f1f5f9; font-weight: 600; color: #0f172a; }
+        
+        /* Callouts */
+        .exam-tip { background-color: #fffbeb; border-left: 4px solid #f59e0b; padding: 1rem; margin: 1.5rem 0; border-radius: 0 0.5rem 0.5rem 0; }
+        .exam-tip::before { content: '\f0eb'; font-family: 'FontAwesome'; font-weight: 900; color: #d97706; margin-right: 0.5rem; }
+        
+        .common-mistake { background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 1rem; margin: 1.5rem 0; border-radius: 0 0.5rem 0.5rem 0; }
+        .common-mistake::before { content: '\f071'; font-family: 'FontAwesome'; font-weight: 900; color: #b91c1c; margin-right: 0.5rem; }
+        
+        /* Flashcard Flip Animation */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .flashcard-inner { transition: transform 0.6s; }
+        .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+
+        /* SVG Diagram styles */
+        .svg-diagram { width: 100%; max-width: 600px; height: auto; margin: 2rem auto; display: block; background: white; border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        
+        /* Modal */
+        .modal-overlay { background-color: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Mobile Header -->
+    <div class="md:hidden fixed top-0 w-full bg-primary text-white p-4 flex justify-between items-center z-50 shadow-md">
+        <div class="font-bold text-lg"><i class="fas fa-cogs mr-2"></i>Mech Basics</div>
+        <button onclick="toggleSidebar()" class="text-white text-2xl focus:outline-none"><i class="fas fa-bars"></i></button>
+    </div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="bg-dark text-slate-300 w-72 flex-shrink-0 h-full flex flex-col transition-transform transform -translate-x-full md:translate-x-0 absolute md:relative z-40">
+        <div class="p-6 bg-slate-900 flex items-center justify-between">
+            <div class="font-bold text-xl text-white tracking-tight"><i class="fas fa-cogs text-blue-400 mr-2"></i>Mech Basics</div>
+            <button onclick="toggleSidebar()" class="md:hidden text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="flex-1 overflow-y-auto py-4">
+            <nav class="space-y-1 px-3">
+                <a href="#" onclick="navigate('home')" class="nav-link block px-4 py-3 rounded-md hover:bg-slate-800 hover:text-white transition-colors"><i class="fas fa-home w-6"></i> Dashboard</a>
+                
+                <div class="pt-4 pb-2 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Curriculum</div>
+                <a href="#" onclick="navigate('unit', 'u1')" class="nav-link block px-4 py-2 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm"><i class="fas fa-tools w-6"></i> Unit I: Machine Tools & Thermo</a>
+                <a href="#" onclick="navigate('unit', 'u2')" class="nav-link block px-4 py-2 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm"><i class="fas fa-snowflake w-6"></i> Unit II: RAC & Hydraulics</a>
+                <a href="#" onclick="navigate('unit', 'u3')" class="nav-link block px-4 py-2 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm"><i class="fas fa-link w-6"></i> Unit III: Drives & Stress</a>
+                <a href="#" onclick="navigate('unit', 'u4')" class="nav-link block px-4 py-2 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm"><i class="fas fa-industry w-6"></i> Unit IV: Mfg & NC Systems</a>
+
+                <div class="pt-4 pb-2 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Exam Prep</div>
+                <a href="#" onclick="navigate('mock-exam')" class="nav-link block px-4 py-2 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm"><i class="fas fa-file-alt w-6"></i> Mock Exam (3 Hr)</a>
+                <a href="#" onclick="navigate('flashcards')" class="nav-link block px-4 py-2 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm"><i class="fas fa-clone w-6"></i> Flashcards</a>
+                <a href="#" onclick="navigate('formulas')" class="nav-link block px-4 py-2 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm"><i class="fas fa-square-root-variable w-6"></i> Formula Sheet</a>
+                <a href="#" onclick="navigate('glossary')" class="nav-link block px-4 py-2 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm"><i class="fas fa-book w-6"></i> Glossary</a>
+            </nav>
+        </div>
+        <div class="p-4 bg-slate-900 border-t border-slate-800">
+            <div class="text-sm text-slate-400 mb-2">Overall Progress</div>
+            <div class="w-full bg-slate-700 rounded-full h-2.5">
+                <div id="overall-progress-bar" class="bg-blue-500 h-2.5 rounded-full" style="width: 0%"></div>
+            </div>
+            <div id="overall-progress-text" class="text-xs text-right mt-1 text-slate-300">0%</div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full relative pt-16 md:pt-0">
+        <!-- Topbar Desktop -->
+        <header class="hidden md:flex bg-white shadow-sm h-16 items-center justify-between px-8 z-10">
+            <div class="text-sm text-slate-500" id="breadcrumb">Dashboard</div>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <input type="text" id="global-search" placeholder="Search topics..." class="pl-10 pr-4 py-2 border border-slate-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-64 transition-all">
+                    <i class="fas fa-search absolute left-3 top-2.5 text-slate-400"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Area -->
+        <div id="app-content" class="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-50 relative pb-24">
+            <!-- Content injected here via JS -->
+        </div>
+    </main>
+
+    <!-- Generic Modal -->
+    <div id="app-modal" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4 transform transition-all">
+            <h3 id="modal-title" class="text-xl font-bold text-slate-800 mb-2">Notice</h3>
+            <p id="modal-body" class="text-slate-600 mb-6">Message goes here.</p>
+            <div class="flex justify-end">
+                <button onclick="closeModal()" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition">OK</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+/* STREAMING_CHUNK:Building comprehensive course data (Unit 1 & 2)... */
+const SVGS = {
+    stressStrain: `<svg class="svg-diagram" viewBox="0 0 500 350" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="white"/>
+        <!-- Axes -->
+        <line x1="50" y1="300" x2="450" y2="300" stroke="black" stroke-width="2"/>
+        <line x1="50" y1="300" x2="50" y2="50" stroke="black" stroke-width="2"/>
+        <text x="220" y="340" font-family="sans-serif" font-size="14">Strain (ε)</text>
+        <text x="20" y="180" font-family="sans-serif" font-size="14" transform="rotate(-90 20,180)">Stress (σ)</text>
+        <!-- Curve -->
+        <path d="M 50 300 L 150 150 Q 160 135 180 145 Q 190 150 200 145 C 250 145, 300 70, 350 50 Q 370 45, 400 90" fill="none" stroke="#1e40af" stroke-width="3"/>
+        <!-- Points -->
+        <circle cx="150" cy="150" r="4" fill="red"/><text x="135" y="140" font-size="12">A</text>
+        <circle cx="160" cy="135" r="4" fill="red"/><text x="145" y="125" font-size="12">B</text>
+        <circle cx="180" cy="145" r="4" fill="red"/><text x="175" y="165" font-size="12">C (Upper Yield)</text>
+        <circle cx="200" cy="145" r="4" fill="red"/><text x="195" y="130" font-size="12">D (Lower Yield)</text>
+        <circle cx="350" cy="50" r="4" fill="red"/><text x="340" y="40" font-size="12">E (Ultimate)</text>
+        <circle cx="400" cy="90" r="4" fill="red"/><text x="410" y="95" font-size="12">F (Fracture)</text>
+        <line x1="150" y1="300" x2="150" y2="150" stroke="gray" stroke-dasharray="4"/>
+    </svg>`,
+    vcrCycle: `<svg class="svg-diagram" viewBox="0 0 500 350" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="white"/>
+        <!-- Components -->
+        <rect x="200" y="250" width="100" height="60" rx="5" fill="#f87171" stroke="#b91c1c" stroke-width="2"/>
+        <text x="210" y="285" font-size="14" fill="white" font-weight="bold">COMPRESSOR</text>
+        
+        <rect x="350" y="100" width="100" height="150" rx="5" fill="#fb923c" stroke="#c2410c" stroke-width="2"/>
+        <text x="360" y="170" font-size="14" fill="white" font-weight="bold">CONDENSER</text>
+        <text x="365" y="190" font-size="12" fill="white">(Heat Reject)</text>
+        
+        <rect x="200" y="40" width="100" height="40" rx="5" fill="#a78bfa" stroke="#6d28d9" stroke-width="2"/>
+        <text x="205" y="65" font-size="12" fill="white" font-weight="bold">EXPANSION VALVE</text>
+        
+        <rect x="50" y="100" width="100" height="150" rx="5" fill="#60a5fa" stroke="#1d4ed8" stroke-width="2"/>
+        <text x="60" y="170" font-size="14" fill="white" font-weight="bold">EVAPORATOR</text>
+        <text x="65" y="190" font-size="12" fill="white">(Cooling)</text>
+        
+        <!-- Arrows -->
+        <path d="M 250 250 L 250 200 L 350 200" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+        <path d="M 400 100 L 400 60 L 300 60" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+        <path d="M 200 60 L 100 60 L 100 100" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+        <path d="M 100 250 L 100 280 L 200 280" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+        
+        <!-- Arrowhead Def -->
+        <defs>
+            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="black" />
+            </marker>
+        </defs>
+        <!-- Labels -->
+        <text x="140" y="295" font-size="10">Low Press Vapour</text>
+        <text x="270" y="215" font-size="10">High Press Vapour</text>
+        <text x="320" y="50" font-size="10">High Press Liquid</text>
+        <text x="110" y="50" font-size="10">Low Press Liquid+Vapour</text>
+    </svg>`,
+    lathe: `<svg class="svg-diagram" viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="white"/>
+        <rect x="50" y="150" width="400" height="30" fill="#94a3b8" stroke="black"/> <!-- Bed -->
+        <text x="230" y="170" font-weight="bold">Lathe Bed</text>
+        
+        <rect x="50" y="50" width="80" height="100" fill="#64748b" stroke="black"/> <!-- Headstock -->
+        <text x="60" y="100" fill="white" font-size="12">Headstock</text>
+        
+        <rect x="130" y="80" width="30" height="40" fill="#334155" stroke="black"/> <!-- Chuck -->
+        <text x="135" y="105" fill="white" font-size="10">Chuck</text>
+        
+        <rect x="380" y="80" width="60" height="70" fill="#64748b" stroke="black"/> <!-- Tailstock -->
+        <text x="390" y="120" fill="white" font-size="12">Tailstock</text>
+        
+        <rect x="220" y="110" width="60" height="40" fill="#475569" stroke="black"/> <!-- Carriage -->
+        <text x="225" y="135" fill="white" font-size="12">Carriage</text>
+        
+        <polygon points="230,110 250,90 270,110" fill="#ef4444" stroke="black"/> <!-- Tool -->
+        <text x="235" y="85" font-size="10">Tool</text>
+        
+        <rect x="160" y="90" width="60" height="20" fill="#cbd5e1" stroke="black"/> <!-- Workpiece -->
+        <text x="165" y="105" font-size="10">Workpiece</text>
+    </svg>`
+};
+
+const DB = {
+    syllabus: [
+        {
+            id: 'u1',
+            title: 'Unit I: Commonly Used Machine Tools & Thermodynamics',
+            description: 'Learn the fundamentals of manufacturing machines and the core laws of energy.',
+            topics: [
+                {
+                    id: 'lathe',
+                    title: 'Lathe Machine',
+                    content: `
+                        <h2>1. What is it?</h2>
+                        <p>A lathe is a power-driven machine tool that removes unwanted material from a rotating workpiece. It uses a stationary cutting tool that is fed parallel or perpendicular to the axis of rotation to produce cylindrical parts.</p>
+                        
+                        <h2>2. Why do we need it?</h2>
+                        <p>Often called the "father of all machine tools", it is essential for producing circular/cylindrical parts like shafts, bolts, pulleys, and gun barrels.</p>
+                        
+                        <h2>3. Diagram</h2>
+                        ${SVGS.lathe}
+                        
+                        <h2>4. Components & Parts</h2>
+                        <table>
+                            <tr><th>Part</th><th>Function</th></tr>
+                            <tr><td><strong>Bed</strong></td><td>Heavy cast-iron base supporting all parts and carrying guideways.</td></tr>
+                            <tr><td><strong>Headstock</strong></td><td>Contains spindle, gears, and drive. Holds and rotates the workpiece.</td></tr>
+                            <tr><td><strong>Tailstock</strong></td><td>Supports the long end of the work; can hold a drill bit.</td></tr>
+                            <tr><td><strong>Carriage</strong></td><td>Moves the cutting tool. Consists of saddle, cross-slide, compound rest, tool post.</td></tr>
+                            <tr><td><strong>Chuck</strong></td><td>Clamps and holds the workpiece securely.</td></tr>
+                        </table>
+                        
+                        <h2>5. Operations on a Lathe</h2>
+                        <ul>
+                            <li><strong>Turning:</strong> Reducing the diameter to make a cylinder.</li>
+                            <li><strong>Facing:</strong> Cutting the flat end of a cylinder perpendicular to the axis.</li>
+                            <li><strong>Taper Turning:</strong> Producing a conical shape.</li>
+                            <li><strong>Thread Cutting:</strong> Cutting helical grooves using the lead screw.</li>
+                            <li><strong>Knurling:</strong> Producing a rough diamond pattern for better grip.</li>
+                        </ul>
+                        
+                        <div class="exam-tip">
+                            <strong>Exam Tip:</strong> If a 5-mark question asks about the Lathe, always draw a neat block diagram, list the main parts, and describe at least 3 operations. Do not forget to mention it rotates the workpiece against a stationary tool.
+                        </div>
+                    `
+                },
+                {
+                    id: 'shaper-planer',
+                    title: 'Shaper and Planer Machines',
+                    content: `
+                        <h2>1. Basic Idea</h2>
+                        <p>Both machines generate flat surfaces, but they operate on opposite principles regarding what moves and what stays stationary.</p>
+                        
+                        <h2>2. The Shaper</h2>
+                        <p>A reciprocating machine where the <strong>ram (holding the tool) moves back and forth</strong> over a <strong>stationary workpiece</strong>.</p>
+                        <ul>
+                            <li>Cutting only occurs during the forward stroke.</li>
+                            <li>The return stroke is faster (Quick Return Mechanism) to save time.</li>
+                            <li>Used for small to medium flat surfaces.</li>
+                        </ul>
+
+                        <h2>3. The Planer</h2>
+                        <p>A machine where the <strong>heavy workpiece reciprocates (moves back and forth on a table)</strong> while the <strong>tool remains stationary</strong>.</p>
+                        <ul>
+                            <li>Used for extremely large and heavy workpieces that cannot move quickly.</li>
+                            <li>Can have multiple tool heads cutting simultaneously.</li>
+                        </ul>
+
+                        <h2>4. Comparison (Very Important for Exams)</h2>
+                        <table>
+                            <tr><th>Feature</th><th>Shaper</th><th>Planer</th></tr>
+                            <tr><td><strong>Motion</strong></td><td>Tool reciprocates, Work is stationary</td><td>Work reciprocates, Tool is stationary</td></tr>
+                            <tr><td><strong>Workpiece Size</strong></td><td>Small to medium</td><td>Large and very heavy</td></tr>
+                            <tr><td><strong>Tool Heads</strong></td><td>Usually one</td><td>Multiple tools can cut at once</td></tr>
+                            <tr><td><strong>Drive</strong></td><td>Quick return mechanism (crank)</td><td>Gear or hydraulic drive on heavy table</td></tr>
+                        </table>
+                        
+                        <div class="common-mistake">
+                            <strong>Common Mistake:</strong> Students often swap the principles. Remember: <strong>S</strong>haper = <strong>S</strong>mall tool moves. <strong>P</strong>laner = <strong>P</strong>art moves.
+                        </div>
+                    `
+                },
+                {
+                    id: 'thermo-basics',
+                    title: 'Thermodynamics: Basics & Systems',
+                    content: `
+                        <h2>1. Introduction</h2>
+                        <p>Thermodynamics is the science of energy conversion, specifically dealing with the relationship between heat, work, and properties of systems.</p>
+                        
+                        <h2>2. Important Terminology</h2>
+                        <ul>
+                            <li><strong>System:</strong> A specific quantity of matter or region of space chosen for study (e.g., gas inside a cylinder).</li>
+                            <li><strong>Surroundings:</strong> Everything external to the system.</li>
+                            <li><strong>Boundary:</strong> The real or imaginary surface separating the system from its surroundings.</li>
+                        </ul>
+
+                        <h2>3. Types of Systems</h2>
+                        <table>
+                            <tr><th>System Type</th><th>Mass Transfer?</th><th>Energy (Heat/Work) Transfer?</th><th>Example</th></tr>
+                            <tr><td><strong>Closed</strong></td><td>No</td><td>Yes</td><td>Gas in a sealed piston</td></tr>
+                            <tr><td><strong>Open</strong></td><td>Yes</td><td>Yes</td><td>Air compressor, water pump</td></tr>
+                            <tr><td><strong>Isolated</strong></td><td>No</td><td>No</td><td>Perfect thermos flask</td></tr>
+                        </table>
+
+                        <h2>4. Properties, State, and Process</h2>
+                        <p><strong>Intensive Properties:</strong> Independent of mass (Pressure, Temperature, Density).</p>
+                        <p><strong>Extensive Properties:</strong> Dependent on mass (Total Volume, Total Energy).</p>
+                        <p><strong>State:</strong> The condition of a system defined by its properties.</p>
+                        <p><strong>Process:</strong> Change from one state to another (e.g., Isothermal = constant temp, Isobaric = constant pressure).</p>
+                        
+                        <h2>5. Work and Heat</h2>
+                        <p>Both are <strong>path functions</strong> (their value depends on the path taken, not just the end points). They are boundary phenomena and represent energy <em>in transit</em>.</p>
+                        <p><strong>Displacement Work:</strong> $W = \\int p \\cdot dV$</p>
+                    `
+                },
+                {
+                    id: 'thermo-laws',
+                    title: 'Laws of Thermodynamics',
+                    content: `
+                        <h2>1. Zeroth Law</h2>
+                        <p><strong>Statement:</strong> If body A and body B are each in thermal equilibrium with a third body C, they are in thermal equilibrium with each other.</p>
+                        <p><strong>Engineering Use:</strong> Forms the basis of temperature measurement (Thermometry).</p>
+                        
+                        <h2>2. First Law (Conservation of Energy)</h2>
+                        <p><strong>Statement:</strong> For a cyclic process, net heat transfer equals net work transfer. $\\oint \\delta Q = \\oint \\delta W$</p>
+                        <p>For a non-cyclic closed system: Heat supplied = Change in Internal Energy + Work Done.</p>
+                        <p><strong>Formula:</strong> $Q = \\Delta U + W$</p>
+                        <p><em>Internal Energy (U):</em> Energy stored in molecules (point function/property).</p>
+                        <p><em>Enthalpy (H):</em> Total energy in flow systems. $H = U + pV$</p>
+
+                        <h2>3. Second Law (Direction of Energy Transfer)</h2>
+                        <p>The First Law says energy is conserved, but it doesn't say which way it flows. The Second Law restricts the direction.</p>
+                        <ul>
+                            <li><strong>Kelvin-Planck Statement:</strong> You cannot build a heat engine that is 100% efficient. Some heat must be rejected to a cold sink.</li>
+                            <li><strong>Clausius Statement:</strong> Heat cannot flow from a cold body to a hot body automatically. You must provide external work (like a compressor in a fridge).</li>
+                        </ul>
+                        
+                        <h2>4. Entropy (S)</h2>
+                        <p>A measure of molecular disorder or randomness. It dictates feasibility. In any real process, the entropy of the universe always increases. $dS = \\frac{\\delta Q_{rev}}{T}$</p>
+
+                        <div class="exam-tip">
+                            <strong>Numerical Practice:</strong> For a heat engine: $\\eta = \\frac{W_{net}}{Q_{in}} = 1 - \\frac{Q_{reject}}{Q_{supply}}$. Make sure all temperatures are in Kelvin!
+                        </div>
+                    `
+                }
+            ]
+        },
+        /* STREAMING_CHUNK:Building comprehensive course data (Unit 3 & 4)... */
+        {
+            id: 'u2',
+            title: 'Unit II: Refrigeration, Air Conditioning & Hydraulics',
+            description: 'Understand cooling cycles and fluid machinery like turbines and pumps.',
+            topics: [
+                {
+                    id: 'rac-vcr',
+                    title: 'Refrigeration & Vapour Compression Cycle',
+                    content: `
+                        <h2>1. What is Refrigeration?</h2>
+                        <p>The process of removing heat from a low-temperature region and rejecting it to a high-temperature region to keep the space cold.</p>
+                        <p><strong>Unit: Ton of Refrigeration (TR):</strong> Heat removal rate required to freeze 1 ton of water at 0°C into ice in 24 hours. (1 TR = 3.5 kW).</p>
+                        
+                        <h2>2. Coefficient of Performance (COP)</h2>
+                        <p>Unlike efficiency, COP can be > 1. $COP = \\frac{\\text{Refrigerating Effect (Cooling)}}{\\text{Work Input}}$</p>
+                        
+                        <h2>3. Simple Vapour Compression Cycle (VCR)</h2>
+                        <p>The most common refrigeration method (used in your home fridge).</p>
+                        ${SVGS.vcrCycle}
+                        
+                        <h2>4. The Four Processes</h2>
+                        <ol>
+                            <li><strong>Evaporator (Cooling):</strong> Liquid refrigerant absorbs heat from the room and boils into low-pressure vapour.</li>
+                            <li><strong>Compressor (Work in):</strong> Compresses vapour to high pressure and temperature.</li>
+                            <li><strong>Condenser (Heat out):</strong> High-pressure vapour rejects heat to outside air and condenses to liquid.</li>
+                            <li><strong>Expansion Valve:</strong> Throttles the liquid, dropping its pressure and temperature drastically before it enters the evaporator.</li>
+                        </ol>
+                    `
+                },
+                {
+                    id: 'psychrometry',
+                    title: 'Psychrometry & Human Comfort',
+                    content: `
+                        <h2>1. What is Psychrometry?</h2>
+                        <p>The study of properties of moist air (mixture of dry air and water vapour). Essential for AC design.</p>
+                        
+                        <h2>2. Key Terms</h2>
+                        <ul>
+                            <li><strong>Dry Bulb Temperature (DBT):</strong> Normal air temperature measured by a standard thermometer.</li>
+                            <li><strong>Wet Bulb Temperature (WBT):</strong> Temperature measured with a wet cloth covering the bulb. Indicates the cooling effect of evaporation. If humidity is 100%, DBT = WBT.</li>
+                            <li><strong>Dew Point Temperature (DPT):</strong> The temperature at which moisture in the air starts condensing (forming dew).</li>
+                            <li><strong>Relative Humidity (RH):</strong> Ratio of actual moisture in the air to the maximum moisture it could hold at that temperature (expressed as %).</li>
+                        </ul>
+                        
+                        <h2>3. Human Comfort</h2>
+                        <p>Depends on temperature, humidity, and air velocity. The ideal "Comfort Zone" for sedentary humans is around <strong>22-25°C DBT and 40-60% RH</strong>.</p>
+                    `
+                },
+                {
+                    id: 'turbines',
+                    title: 'Hydraulic Turbines',
+                    content: `
+                        <h2>1. What is a Hydraulic Turbine?</h2>
+                        <p>A machine that converts the energy of flowing/falling water into mechanical shaft rotation, used to drive electrical generators in dams.</p>
+                        
+                        <h2>2. Impulse vs. Reaction Turbines</h2>
+                        <p><strong>Impulse (Pelton):</strong> All pressure energy is converted to kinetic energy in a nozzle <em>before</em> hitting the blades. Pressure remains atmospheric.</p>
+                        <p><strong>Reaction (Francis, Kaplan):</strong> Water is under pressure as it flows through the blades. Both pressure and velocity change inside the runner.</p>
+                        
+                        <h2>3. Comparison Table (Must Memorize)</h2>
+                        <table>
+                            <tr><th>Feature</th><th>Pelton Wheel</th><th>Francis Turbine</th><th>Kaplan Turbine</th></tr>
+                            <tr><td><strong>Type</strong></td><td>Impulse</td><td>Reaction</td><td>Reaction</td></tr>
+                            <tr><td><strong>Head of Water</strong></td><td>High (>250m)</td><td>Medium (60-250m)</td><td>Low (<60m)</td></tr>
+                            <tr><td><strong>Discharge (Flow)</strong></td><td>Low</td><td>Medium</td><td>High</td></tr>
+                            <tr><td><strong>Flow Direction</strong></td><td>Tangential</td><td>Mixed (Radial to Axial)</td><td>Axial</td></tr>
+                        </table>
+                    `
+                }
+            ]
+        },
+        {
+            id: 'u3',
+            title: 'Unit III: Power Transmission & Stress/Strain',
+            description: 'Mechanisms to transfer power and the behavior of materials under load.',
+            topics: [
+                {
+                    id: 'power-trans',
+                    title: 'Belt, Rope, Chain, and Gear Drives',
+                    content: `
+                        <h2>1. Why Power Transmission?</h2>
+                        <p>To transfer mechanical power from a motor to a machine, often changing speed or torque.</p>
+                        
+                        <h2>2. Belt Drives</h2>
+                        <p>Used for medium distances. Rely on friction.</p>
+                        <ul>
+                            <li><strong>Open Belt:</strong> Pulleys rotate in the same direction.</li>
+                            <li><strong>Cross Belt:</strong> Pulleys rotate in opposite directions. Higher grip but more wear.</li>
+                            <li><strong>V-Belt:</strong> Fits in a grooved pulley. Wedging action gives excellent grip and prevents <strong>slip</strong>.</li>
+                        </ul>
+                        <p><em>Slip:</em> Actual sliding of belt over pulley (loss of power).<br><em>Creep:</em> Micro-stretching and contracting of belt causing slight speed loss.</p>
+                        
+                        <h2>3. Chain vs Gear Drives</h2>
+                        <p><strong>Chain Drive:</strong> Uses sprockets and links. Positive drive (no slip). Used for bicycles, motorcycles.</p>
+                        <p><strong>Gear Drive:</strong> Used for short distances. Exact velocity ratio. Types: Spur (parallel), Helical (angled teeth, quieter), Bevel (intersecting 90° shafts), Worm (large speed reduction).</p>
+                    `
+                },
+                {
+                    id: 'stress-strain',
+                    title: 'Stress, Strain & Hooke\'s Law',
+                    content: `
+                        <h2>1. Stress ($\\sigma$)</h2>
+                        <p>Internal resisting force per unit area. Formula: $\\sigma = \\frac{P}{A}$ (Unit: $N/m^2$ or Pascal). Types: Tensile (pull), Compressive (push), Shear (sliding).</p>
+                        
+                        <h2>2. Strain ($\\epsilon$)</h2>
+                        <p>Deformation per unit length. $\\epsilon = \\frac{\\delta L}{L}$ (No units). Types: Linear, Lateral, Volumetric, Shear.</p>
+                        
+                        <h2>3. Poisson's Ratio ($\\mu$ or $\\nu$)</h2>
+                        <p>When you pull a rubber band, it gets longer (linear strain) but also thinner (lateral strain).<br>$\\mu = \\frac{\\text{Lateral Strain}}{\\text{Linear Strain}}$</p>
+                        
+                        <h2>4. Hooke's Law & Elastic Constants</h2>
+                        <p>Within elastic limit, stress is directly proportional to strain. $\\sigma = E \\cdot \\epsilon$</p>
+                        <ul>
+                            <li><strong>E (Young's Modulus):</strong> Tensile Stress / Linear Strain</li>
+                            <li><strong>G or C (Shear Modulus):</strong> Shear Stress / Shear Strain</li>
+                            <li><strong>K (Bulk Modulus):</strong> Volumetric Stress / Volumetric Strain</li>
+                        </ul>
+                        <p><strong>Key Relationships:</strong><br>$E = 2G(1+\\mu)$<br>$E = 3K(1-2\\mu)$</p>
+                    `
+                },
+                {
+                    id: 'stress-curve',
+                    title: 'Stress-Strain Diagram (Mild Steel)',
+                    content: `
+                        <h2>1. The Diagram</h2>
+                        <p>This is the most important graph in mechanical engineering. It shows how a ductile material (mild steel) behaves when stretched until it breaks.</p>
+                        ${SVGS.stressStrain}
+                        
+                        <h2>2. Key Points Explained</h2>
+                        <ul>
+                            <li><strong>A (Proportional Limit):</strong> Stress is directly proportional to strain (straight line). Hooke's law applies.</li>
+                            <li><strong>B (Elastic Limit):</strong> Max load before permanent deformation. If unloaded here, it snaps back to original length.</li>
+                            <li><strong>C/D (Yield Points):</strong> Material starts stretching plastically (like chewing gum) without much extra load.</li>
+                            <li><strong>E (Ultimate Stress):</strong> The maximum stress the material can take. "Necking" (thinning) begins here.</li>
+                            <li><strong>F (Fracture Point):</strong> The specimen breaks.</li>
+                        </ul>
+                    `
+                }
+            ]
+        },
+        {
+            id: 'u4',
+            title: 'Unit IV: Mfg Systems & Numerical Control',
+            description: 'Modern manufacturing methodologies and CNC fundamentals.',
+            topics: [
+                {
+                    id: 'mfg-systems',
+                    title: 'Types of Manufacturing Systems',
+                    content: `
+                        <h2>1. Classification based on Volume</h2>
+                        <table>
+                            <tr><th>Type</th><th>Description</th><th>Example</th></tr>
+                            <tr><td><strong>Job Shop</strong></td><td>1 or 2 custom products. Highly skilled labour, general machines.</td><td>Custom prototype, bridge part.</td></tr>
+                            <tr><td><strong>Batch</strong></td><td>Medium quantity produced periodically in groups (batches).</td><td>Books, clothing, specific car parts.</td></tr>
+                            <tr><td><strong>Mass</strong></td><td>Very large volume of identical products. Special machines.</td><td>Pens, standard cars, smartphones.</td></tr>
+                            <tr><td><strong>Continuous/Flow</strong></td><td>Uninterrupted flow of product. Process industry.</td><td>Oil refinery, chemical plant.</td></tr>
+                        </table>
+                    `
+                },
+                {
+                    id: 'nc-cnc',
+                    title: 'Numerical Control (NC) & CNC',
+                    content: `
+                        <h2>1. What is NC?</h2>
+                        <p>Numerical Control is a method of automatically operating a machine tool via coded instructions (part program) rather than a manual operator turning handwheels.</p>
+                        
+                        <h2>2. Components</h2>
+                        <ol>
+                            <li><strong>Part Program:</strong> The code (G-codes, M-codes) containing tool paths.</li>
+                            <li><strong>Machine Control Unit (MCU):</strong> The brain. Reads code and sends electrical signals to motors.</li>
+                            <li><strong>Machine Tool:</strong> The physical lathe/mill with servo motors.</li>
+                        </ol>
+                        
+                        <h2>3. Control Types</h2>
+                        <p><strong>Point-to-Point:</strong> Tool moves to a coordinate and drills. Path taken doesn't matter (Drilling).</p>
+                        <p><strong>Contouring:</strong> Continuous path control. Tool cuts while moving in complex curves (Milling a die).</p>
+                        <p><strong>Open Loop vs Closed Loop:</strong> Open loop has no feedback (stepper motors). Closed loop has position sensors (encoders) feeding back to MCU to ensure high accuracy.</p>
+                        
+                        <h2>4. NC vs CNC</h2>
+                        <p><strong>NC:</strong> Old technology. Uses punched tape. Hard-wired logic. Cannot edit code at machine.</p>
+                        <p><strong>CNC (Computer NC):</strong> Uses a dedicated microprocessor/computer. Code is stored in memory, easily edited on a screen, has diagnostic software.</p>
+                    `
+                }
+            ]
+        }
+    ],
+    /* STREAMING_CHUNK:Generating Question Bank and Mock Exam data... */
+    questions: [
+        // Unit 1
+        { unit: 'u1', type: 'short', marks: 2, q: "Define a machine tool.", a: "A power-driven device used to shape, cut, or form rigid materials by removing excess material in the form of chips." },
+        { unit: 'u1', type: 'short', marks: 2, q: "State the principle of a Lathe.", a: "The workpiece is held and rotated, while a stationary cutting tool is fed linearly against it to remove material." },
+        { unit: 'u1', type: 'short', marks: 2, q: "State the First Law of Thermodynamics.", a: "For a cyclic process, net heat transfer equals net work transfer. For a closed system, Q = ΔU + W." },
+        { unit: 'u1', type: 'long', marks: 10, q: "Explain the construction and working of a Lathe machine with a neat block diagram.", a: "Include Diagram. Parts: Bed (base), Headstock (spindle/drive), Tailstock (support), Carriage (moves tool). Working: Workpiece rotates, tool feeds parallel/perpendicular to axis." },
+        { unit: 'u1', type: 'long', marks: 10, q: "Differentiate between a Shaper and a Planer.", a: "Shaper: Tool reciprocates, work stationary, for small jobs. Planer: Work reciprocates, tool stationary, for large heavy jobs, multiple tools." },
+        { unit: 'u1', type: 'long', marks: 10, q: "Explain Kelvin-Planck and Clausius statements of the Second Law.", a: "KP: Impossible to have 100% efficient heat engine. Clausius: Impossible for heat to flow cold to hot without external work." },
+        
+        // Unit 2
+        { unit: 'u2', type: 'short', marks: 2, q: "Define Ton of Refrigeration (TR).", a: "Rate of heat removal to freeze 1 ton of water at 0°C into ice in 24 hours. 1 TR = 3.5 kW." },
+        { unit: 'u2', type: 'short', marks: 2, q: "What is Dry Bulb Temperature?", a: "The temperature of air measured by an ordinary thermometer, unaffected by moisture." },
+        { unit: 'u2', type: 'short', marks: 2, q: "Difference between impulse and reaction turbine?", a: "Impulse (Pelton): pressure remains atmospheric, purely kinetic energy. Reaction (Francis/Kaplan): pressure drops as water passes through blades." },
+        { unit: 'u2', type: 'long', marks: 10, q: "Explain the Simple Vapour Compression Refrigeration Cycle.", a: "Four parts: Evaporator (absorbs heat, boils liquid to vapour), Compressor (raises pressure/temp), Condenser (rejects heat, condenses to liquid), Expansion valve (throttles to low pressure)." },
+        { unit: 'u2', type: 'long', marks: 10, q: "Compare Pelton, Francis, and Kaplan turbines.", a: "Pelton: High head, low discharge, impulse, tangential. Francis: Medium head, medium discharge, reaction, mixed flow. Kaplan: Low head, high discharge, reaction, axial." },
+        
+        // Unit 3
+        { unit: 'u3', type: 'short', marks: 2, q: "Define Poisson's ratio.", a: "The ratio of lateral strain to longitudinal strain within the elastic limit." },
+        { unit: 'u3', type: 'short', marks: 2, q: "What is slip in a belt drive?", a: "Relative sliding motion between the belt and pulley surface, reducing the velocity ratio." },
+        { unit: 'u3', type: 'short', marks: 2, q: "Define Yield Point.", a: "The stress point where a material begins to deform plastically with little to no increase in applied load." },
+        { unit: 'u3', type: 'long', marks: 10, q: "Draw and explain the stress-strain diagram for mild steel.", a: "Draw graph. Explain: Proportional limit (Hooke's law), Elastic limit, Upper/Lower Yield points (plasticity begins), Ultimate stress (necking), Fracture point." },
+        { unit: 'u3', type: 'long', marks: 10, q: "Explain types of gears and their applications.", a: "Spur (parallel shafts), Helical (parallel/crossed, quieter, angled teeth), Bevel (intersecting at 90 deg), Worm (perpendicular non-intersecting, high reduction)." },
+        
+        // Unit 4
+        { unit: 'u4', type: 'short', marks: 2, q: "What is Job Shop production?", a: "Manufacturing small quantities of custom, highly varied products using general-purpose machines and skilled labor." },
+        { unit: 'u4', type: 'short', marks: 2, q: "Define MCU in NC machines.", a: "Machine Control Unit. The 'brain' that reads the part program and converts it into signals for machine actuators." },
+        { unit: 'u4', type: 'short', marks: 2, q: "Difference between open and closed loop NC.", a: "Open loop lacks feedback on actual tool position. Closed loop uses encoders to verify and correct tool position continuously." },
+        { unit: 'u4', type: 'long', marks: 10, q: "Compare NC and CNC machines.", a: "NC: Hard-wired, punched tape, no on-board editing, wear of tape. CNC: Computer-controlled, memory storage, easy editing, diagnostics, high flexibility." },
+        { unit: 'u4', type: 'long', marks: 10, q: "Explain Point-to-Point and Contouring control in NC.", a: "PTP: Tool moves to specific points, path doesn't matter (e.g. drilling). Contouring: Continuous path control of multiple axes to cut complex profiles (e.g. milling)." }
+    ],
+    flashcards: [
+        { term: "Machine Tool", def: "A power-driven device used to shape metal by removing excess material in the form of chips." },
+        { term: "Lathe", def: "Removes material from a rotating workpiece using a stationary tool fed linearly." },
+        { term: "Shaper", def: "Tool reciprocates over a stationary workpiece (for small jobs)." },
+        { term: "Planer", def: "Workpiece reciprocates under a stationary tool (for large heavy jobs)." },
+        { term: "Zeroth Law", def: "Basis for thermometry; equilibrium transferability." },
+        { term: "First Law", def: "Conservation of energy. Q = ΔU + W." },
+        { term: "Second Law", def: "Dictates direction of heat flow (Kelvin-Planck & Clausius statements)." },
+        { term: "Ton of Refrigeration", def: "Cooling effect to freeze 1 ton of water at 0°C in 24 hrs. (3.5 kW)." },
+        { term: "COP", def: "Coefficient of Performance = Cooling Effect / Work Input." },
+        { term: "Pelton Wheel", def: "Impulse turbine, high head, tangential flow." },
+        { term: "Hooke's Law", def: "Within elastic limit, stress is directly proportional to strain (σ = E·ε)." },
+        { term: "Poisson's Ratio", def: "Lateral strain / Longitudinal strain." },
+        { term: "Young's Modulus (E)", def: "Linear Stress / Linear Strain." },
+        { term: "Ductility", def: "Ability to be drawn into wires (plastic deformation in tension)." },
+        { term: "Job Shop", def: "Custom production, low volume, high variety." },
+        { term: "Closed Loop NC", def: "System with feedback sensors to ensure precise tool positioning." }
+    ],
+    glossary: [
+        { term: "Boundary", def: "Real or imaginary surface separating a thermodynamic system from surroundings." },
+        { term: "Brittleness", def: "Tendency to fracture with little to no plastic deformation (e.g., cast iron)." },
+        { term: "Centrifugal Pump", def: "Converts rotational kinetic energy into hydrodynamic pressure to move fluid outward." },
+        { term: "Creep", def: "Slow, progressive plastic deformation under constant load at elevated temperatures." },
+        { term: "Dew Point (DPT)", def: "Temperature at which moisture starts to condense from air." },
+        { term: "Enthalpy (H)", def: "Total energy of a flow system (U + pV)." },
+        { term: "Entropy (S)", def: "Measure of molecular disorder or unavailability of useful energy." },
+        { term: "Fatigue", def: "Failure of a material due to cyclic/repeated loading." },
+        { term: "Malleability", def: "Ability to be hammered into sheets (plastic deformation in compression)." },
+        { term: "Toughness", def: "Ability to absorb energy and withstand shock without fracturing." }
+    ]
+};
+
+/* STREAMING_CHUNK:Initializing state management and local storage... */
+let appState = {
+    currentView: 'home', // home, unit, topic, mock-exam, flashcards, formulas, glossary
+    currentParams: null,
+    progress: JSON.parse(localStorage.getItem('mechBasicsProgress')) || {
+        completedTopics: [],
+        flashcardsMastered: [],
+        mockExamsTaken: 0,
+        averageScore: 0
+    }
+};
+
+function saveProgress() {
+    localStorage.setItem('mechBasicsProgress', JSON.stringify(appState.progress));
+    updateProgressUI();
+}
+
+function markTopicComplete(topicId) {
+    if (!appState.progress.completedTopics.includes(topicId)) {
+        appState.progress.completedTopics.push(topicId);
+        saveProgress();
+    }
+}
+
+function updateProgressUI() {
+    let totalTopics = 0;
+    DB.syllabus.forEach(u => totalTopics += u.topics.length);
+    let completed = appState.progress.completedTopics.length;
+    let pct = Math.round((completed / totalTopics) * 100) || 0;
+    
+    document.getElementById('overall-progress-bar').style.width = `${pct}%`;
+    document.getElementById('overall-progress-text').innerText = `${pct}% (${completed}/${totalTopics} Topics)`;
+}
+
+/* STREAMING_CHUNK:Building UI rendering engine (Dashboard, Navigation)... */
+function toggleSidebar() {
+    const sb = document.getElementById('sidebar');
+    sb.classList.toggle('-translate-x-full');
+}
+
+function navigate(view, params = null) {
+    appState.currentView = view;
+    appState.currentParams = params;
+    
+    // Close sidebar on mobile
+    if(window.innerWidth < 768) {
+        document.getElementById('sidebar').classList.add('-translate-x-full');
+    }
+    
+    // Update active nav styling
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('bg-primary', 'text-white');
+        link.classList.add('text-slate-300', 'hover:bg-slate-800');
+    });
+    
+    renderApp();
+    window.scrollTo(0, 0);
+}
+
+function renderApp() {
+    const container = document.getElementById('app-content');
+    const breadcrumb = document.getElementById('breadcrumb');
+    
+    // Clear and fade in
+    container.style.opacity = 0;
+    setTimeout(() => {
+        container.innerHTML = '';
+        
+        if (appState.currentView === 'home') {
+            breadcrumb.innerText = 'Dashboard';
+            container.innerHTML = renderHome();
+        } else if (appState.currentView === 'unit') {
+            let unit = DB.syllabus.find(u => u.id === appState.currentParams);
+            breadcrumb.innerHTML = `<span class="cursor-pointer hover:text-primary" onclick="navigate('home')">Dashboard</span> / ${unit.title.split(':')[0]}`;
+            container.innerHTML = renderUnit(unit);
+        } else if (appState.currentView === 'topic') {
+            let topic, parentUnit;
+            for (let u of DB.syllabus) {
+                let t = u.topics.find(x => x.id === appState.currentParams);
+                if (t) { topic = t; parentUnit = u; break; }
+            }
+            breadcrumb.innerHTML = `<span class="cursor-pointer hover:text-primary" onclick="navigate('home')">Dashboard</span> / <span class="cursor-pointer hover:text-primary" onclick="navigate('unit', '${parentUnit.id}')">${parentUnit.title.split(':')[0]}</span> / ${topic.title}`;
+            container.innerHTML = renderTopic(topic);
+            
+            // Re-run MathJax
+            if(window.MathJax) { window.MathJax.typesetPromise(); }
+        } else if (appState.currentView === 'mock-exam') {
+            breadcrumb.innerText = 'Mock Examination Simulator';
+            container.innerHTML = renderMockExamStart();
+        } else if (appState.currentView === 'flashcards') {
+            breadcrumb.innerText = 'Flashcards';
+            container.innerHTML = renderFlashcards();
+            initFlashcardLogic();
+        } else if (appState.currentView === 'formulas') {
+            breadcrumb.innerText = 'Formula Sheet';
+            container.innerHTML = renderFormulas();
+            if(window.MathJax) { window.MathJax.typesetPromise(); }
+        } else if (appState.currentView === 'glossary') {
+            breadcrumb.innerText = 'Engineering Glossary';
+            container.innerHTML = renderGlossary();
+        }
+
+        container.style.transition = "opacity 0.3s";
+        container.style.opacity = 1;
+    }, 150);
+}
+
+function renderHome() {
+    let totalTopics = 0; DB.syllabus.forEach(u => totalTopics += u.topics.length);
+    let completed = appState.progress.completedTopics.length;
+    let pct = Math.round((completed / totalTopics) * 100) || 0;
+
+    let html = `
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-slate-800 mb-2">Welcome to Mech Basics!</h1>
+            <p class="text-slate-600">Your complete self-study portal for First-Year Mechanical Engineering.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
+                <div class="text-sm font-semibold text-slate-500 uppercase">Syllabus Coverage</div>
+                <div class="text-3xl font-bold text-slate-800 mt-2">${pct}%</div>
+                <div class="text-sm text-slate-500 mt-1">${completed} of ${totalTopics} topics read</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500">
+                <div class="text-sm font-semibold text-slate-500 uppercase">Flashcards Mastered</div>
+                <div class="text-3xl font-bold text-slate-800 mt-2">${appState.progress.flashcardsMastered.length}</div>
+                <div class="text-sm text-slate-500 mt-1">Out of ${DB.flashcards.length} terms</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-purple-500">
+                <div class="text-sm font-semibold text-slate-500 uppercase">Mock Exams Taken</div>
+                <div class="text-3xl font-bold text-slate-800 mt-2">${appState.progress.mockExamsTaken}</div>
+                <div class="text-sm text-slate-500 mt-1">Avg Score: ${Math.round(appState.progress.averageScore)}%</div>
+            </div>
+        </div>
+
+        <h2 class="text-xl font-bold text-slate-800 mb-4">Course Units</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    `;
+
+    DB.syllabus.forEach((unit, idx) => {
+        let unitCompleted = unit.topics.filter(t => appState.progress.completedTopics.includes(t.id)).length;
+        let unitPct = Math.round((unitCompleted / unit.topics.length) * 100);
+        let colors = ['text-blue-600', 'text-teal-600', 'text-purple-600', 'text-orange-600'];
+        let bgColors = ['bg-blue-100', 'bg-teal-100', 'bg-purple-100', 'bg-orange-100'];
+        
+        html += `
+            <div onclick="navigate('unit', '${unit.id}')" class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-6 cursor-pointer border border-slate-100">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="text-xs font-bold uppercase tracking-wider ${colors[idx]} mb-1">${unit.id.toUpperCase()}</div>
+                        <h3 class="text-lg font-bold text-slate-800 leading-tight mb-2">${unit.title.split(':')[1].trim()}</h3>
+                    </div>
+                    <div class="${bgColors[idx]} ${colors[idx]} p-3 rounded-lg"><i class="fas fa-book-open"></i></div>
+                </div>
+                <p class="text-sm text-slate-500 mt-2 line-clamp-2">${unit.description}</p>
+                <div class="mt-4">
+                    <div class="w-full bg-slate-100 rounded-full h-2">
+                        <div class="bg-slate-800 h-2 rounded-full" style="width: ${unitPct}%"></div>
+                    </div>
+                    <div class="text-xs text-right mt-1 font-medium text-slate-500">${unitPct}% Complete</div>
+                </div>
+            </div>
+        `;
+    });
+
+    html += `</div>`;
+    return html;
+}
+
+function renderUnit(unit) {
+    let html = `
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-slate-800 mb-2">${unit.title}</h1>
+            <p class="text-slate-600">${unit.description}</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    `;
+
+    unit.topics.forEach((topic, idx) => {
+        let isDone = appState.progress.completedTopics.includes(topic.id);
+        html += `
+            <div onclick="navigate('topic', '${topic.id}')" class="p-4 border-b border-slate-100 hover:bg-slate-50 cursor-pointer flex items-center justify-between transition-colors ${idx === unit.topics.length-1 ? 'border-b-0' : ''}">
+                <div class="flex items-center space-x-4">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center ${isDone ? 'bg-green-100 text-green-600' : 'bg-slate-100 text-slate-400'}">
+                        <i class="fas ${isDone ? 'fa-check' : 'fa-play'} text-xs"></i>
+                    </div>
+                    <span class="font-medium text-slate-700">${topic.title}</span>
+                </div>
+                <i class="fas fa-chevron-right text-slate-300"></i>
+            </div>
+        `;
+    });
+
+    html += `</div>`;
+    return html;
+}
+
+/* STREAMING_CHUNK:Implementing Study Mode (Content rendering, Tabs)... */
+function renderTopic(topic) {
+    let parentUnitId = DB.syllabus.find(u => u.topics.some(t => t.id === topic.id)).id;
+    
+    // Automatically mark as complete when opened
+    markTopicComplete(topic.id);
+
+    return `
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-10 content-area">
+            <div class="flex justify-between items-center mb-6 border-b pb-4">
+                <h1 class="!mb-0 !border-0 !pb-0">${topic.title}</h1>
+                <button onclick="navigate('unit', '${parentUnitId}')" class="text-sm bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1 rounded-md transition"><i class="fas fa-arrow-left mr-1"></i> Back</button>
+            </div>
+            
+            <div class="prose max-w-none text-slate-700">
+                ${topic.content}
+            </div>
+            
+            <div class="mt-12 pt-6 border-t border-slate-200 flex justify-between">
+                <button onclick="navigate('unit', '${parentUnitId}')" class="text-primary font-medium hover:underline">Return to Unit Menu</button>
+                <div class="text-green-600 font-medium"><i class="fas fa-check-circle mr-1"></i> Marked as Completed</div>
+            </div>
+        </div>
+    `;
+}
+
+function renderFormulas() {
+    return `
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-10 content-area">
+            <h1 class="mb-6"><i class="fas fa-square-root-variable mr-2 text-primary"></i>Formula Sheet</h1>
+            
+            <h2>Thermodynamics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 bg-slate-50 rounded-lg border">
+                    <div class="font-bold mb-2">First Law (Closed System)</div>
+                    <div class="text-lg text-center p-2 bg-white border rounded">$$ Q = \\Delta U + W $$</div>
+                    <div class="text-sm mt-2 text-slate-500">Q = Heat, ΔU = Internal Energy, W = Work</div>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-lg border">
+                    <div class="font-bold mb-2">Work (Displacement)</div>
+                    <div class="text-lg text-center p-2 bg-white border rounded">$$ W = \\int p \\cdot dV $$</div>
+                    <div class="text-sm mt-2 text-slate-500">p = Pressure, dV = Change in Volume</div>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-lg border">
+                    <div class="font-bold mb-2">Enthalpy</div>
+                    <div class="text-lg text-center p-2 bg-white border rounded">$$ H = U + pV $$</div>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-lg border">
+                    <div class="font-bold mb-2">Heat Engine Efficiency</div>
+                    <div class="text-lg text-center p-2 bg-white border rounded">$$ \\eta = 1 - \\frac{Q_{reject}}{Q_{supply}} $$</div>
+                </div>
+            </div>
+
+            <h2>Stress and Strain</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 bg-slate-50 rounded-lg border">
+                    <div class="font-bold mb-2">Stress & Strain</div>
+                    <div class="text-lg text-center p-2 bg-white border rounded">$$ \\sigma = \\frac{P}{A}, \\quad \\epsilon = \\frac{\\delta L}{L} $$</div>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-lg border">
+                    <div class="font-bold mb-2">Hooke's Law</div>
+                    <div class="text-lg text-center p-2 bg-white border rounded">$$ \\sigma = E \\cdot \\epsilon $$</div>
+                    <div class="text-sm mt-2 text-slate-500">E = Young's Modulus</div>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-lg border">
+                    <div class="font-bold mb-2">Elastic Constants Rel 1</div>
+                    <div class="text-lg text-center p-2 bg-white border rounded">$$ E = 2G(1+\\mu) $$</div>
+                    <div class="text-sm mt-2 text-slate-500">G = Modulus of Rigidity, μ = Poisson's ratio</div>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-lg border">
+                    <div class="font-bold mb-2">Elastic Constants Rel 2</div>
+                    <div class="text-lg text-center p-2 bg-white border rounded">$$ E = 3K(1-2\\mu) $$</div>
+                    <div class="text-sm mt-2 text-slate-500">K = Bulk Modulus</div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function renderGlossary() {
+    let html = `
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-10 content-area">
+            <h1 class="mb-6"><i class="fas fa-book mr-2 text-primary"></i>Engineering Glossary</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    `;
+    
+    // Sort alphabetically
+    let sortedGlossary = [...DB.glossary].sort((a, b) => a.term.localeCompare(b.term));
+    
+    sortedGlossary.forEach(item => {
+        html += `
+            <div class="border border-slate-200 rounded-lg p-4 bg-slate-50">
+                <div class="font-bold text-lg text-slate-800 mb-1">${item.term}</div>
+                <div class="text-sm text-slate-600">${item.def}</div>
+            </div>
+        `;
+    });
+    
+    html += `</div></div>`;
+    return html;
+}
+
+/* STREAMING_CHUNK:Implementing Mock Exam engine... */
+let activeExam = null;
+
+function renderMockExamStart() {
+    return `
+        <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-8 text-center mt-10">
+            <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl">
+                <i class="fas fa-file-signature"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-slate-800 mb-4">University Mock Examination</h1>
+            <p class="text-slate-600 mb-6">This simulator generates a paper matching the official exam pattern: 50 Marks, 3 Hours. Question 1 is compulsory (all units). You must select one long question from each unit for the remainder.</p>
+            
+            <div class="bg-slate-50 rounded-lg p-6 text-left mb-8 border border-slate-200 inline-block w-full">
+                <h3 class="font-bold text-slate-800 mb-3 border-b pb-2">Exam Pattern Breakdown</h3>
+                <ul class="space-y-2 text-sm text-slate-700">
+                    <li><i class="fas fa-check-circle text-green-500 mr-2"></i><strong>Q1 (Compulsory):</strong> 5 short questions (2 marks each) = 10 Marks</li>
+                    <li><i class="fas fa-check-circle text-green-500 mr-2"></i><strong>Unit I:</strong> Select 1 out of 2 (10 Marks)</li>
+                    <li><i class="fas fa-check-circle text-green-500 mr-2"></i><strong>Unit II:</strong> Select 1 out of 2 (10 Marks)</li>
+                    <li><i class="fas fa-check-circle text-green-500 mr-2"></i><strong>Unit III:</strong> Select 1 out of 2 (10 Marks)</li>
+                    <li><i class="fas fa-check-circle text-green-500 mr-2"></i><strong>Unit IV:</strong> Select 1 out of 2 (10 Marks)</li>
+                    <li><i class="fas fa-clock text-blue-500 mr-2"></i><strong>Duration:</strong> 3 Hours</li>
+                </ul>
+            </div>
+            
+            <button onclick="startMockExam()" class="bg-primary hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:-translate-y-1">
+                Generate & Start Paper
+            </button>
+        </div>
+    `;
+}
+
+function startMockExam() {
+    // Generate paper
+    let shortQs = DB.questions.filter(q => q.type === 'short').sort(() => 0.5 - Math.random()).slice(0, 5);
+    let longQsU1 = DB.questions.filter(q => q.type === 'long' && q.unit === 'u1').sort(() => 0.5 - Math.random()).slice(0, 2);
+    let longQsU2 = DB.questions.filter(q => q.type === 'long' && q.unit === 'u2').sort(() => 0.5 - Math.random()).slice(0, 2);
+    let longQsU3 = DB.questions.filter(q => q.type === 'long' && q.unit === 'u3').sort(() => 0.5 - Math.random()).slice(0, 2);
+    let longQsU4 = DB.questions.filter(q => q.type === 'long' && q.unit === 'u4').sort(() => 0.5 - Math.random()).slice(0, 2);
+
+    // Fallback if not enough questions (development safety)
+    if(longQsU1.length < 2) longQsU1.push(longQsU1[0]);
+    if(longQsU2.length < 2) longQsU2.push(longQsU2[0]);
+    if(longQsU3.length < 2) longQsU3.push(longQsU3[0]);
+    if(longQsU4.length < 2) longQsU4.push(longQsU4[0]);
+
+    activeExam = { shortQs, longQsU1, longQsU2, longQsU3, longQsU4, startTime: Date.now() };
+    
+    document.getElementById('breadcrumb').innerText = 'Mock Examination - In Progress';
+    document.getElementById('app-content').innerHTML = renderMockExamPaper();
+}
+
+function renderMockExamPaper() {
+    const e = activeExam;
+    let html = `
+        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-8 content-area">
+            <div class="flex justify-between items-center border-b-4 border-slate-800 pb-4 mb-6">
+                <div>
+                    <div class="font-bold text-xl">BASICS OF MECHANICAL ENGINEERING</div>
+                    <div class="text-sm text-slate-500">Course Code: 25ESC-ME-103H | Max Marks: 50 | Time: 3 Hours</div>
+                </div>
+                <div class="bg-red-50 text-red-600 font-bold px-4 py-2 rounded border border-red-200">
+                    <i class="fas fa-clock mr-1"></i> Exam Mode
+                </div>
+            </div>
+            
+            <p class="font-bold text-center italic mb-6">Note: Attempt Question 1 (Compulsory) and ONE question from each of the remaining Units.</p>
+            
+            <div class="mb-8">
+                <h3 class="font-bold text-lg mb-2 text-slate-800">Q1. Attempt all parts. (5 × 2 = 10 Marks)</h3>
+                <ol class="list-[lower-alpha] pl-6 space-y-3 font-medium">
+    `;
+    
+    e.shortQs.forEach(q => { html += `<li>${q.q}</li>`; });
+    
+    html += `</ol></div>`;
+
+    const renderUnitSection = (unitTitle, qArray, qNumStart) => {
+        return `
+            <div class="mb-8 pt-6 border-t border-slate-300">
+                <h2 class="text-center font-bold text-xl mb-4 text-slate-800 underline">${unitTitle}</h2>
+                <div class="mb-4">
+                    <div class="flex justify-between font-medium"><span>Q${qNumStart}. ${qArray[0].q}</span><span>(10)</span></div>
+                </div>
+                <div class="text-center font-bold italic my-4 text-slate-500">--- OR ---</div>
+                <div class="mb-4">
+                    <div class="flex justify-between font-medium"><span>Q${qNumStart+1}. ${qArray[1].q}</span><span>(10)</span></div>
+                </div>
+            </div>
+        `;
+    };
+
+    html += renderUnitSection('UNIT I', e.longQsU1, 2);
+    html += renderUnitSection('UNIT II', e.longQsU2, 4);
+    html += renderUnitSection('UNIT III', e.longQsU3, 6);
+    html += renderUnitSection('UNIT IV', e.longQsU4, 8);
+
+    html += `
+            <div class="mt-12 pt-6 border-t border-slate-200 text-center">
+                <button onclick="submitExam()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow transition">
+                    Finish & View Answer Key
+                </button>
+            </div>
+        </div>
+    `;
+    return html;
+}
+
+function submitExam() {
+    showModal("Exam Finished", "Great job! Taking practice tests is the best way to prepare. Let's review the answer key.");
+    
+    // Update progress stats
+    appState.progress.mockExamsTaken += 1;
+    appState.progress.averageScore = (appState.progress.averageScore * (appState.progress.mockExamsTaken - 1) + 85) / appState.progress.mockExamsTaken; // Fake a good score for UI demo
+    saveProgress();
+
+    document.getElementById('breadcrumb').innerText = 'Mock Examination - Solution Key';
+    
+    const e = activeExam;
+    let html = `<div class="max-w-4xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-8 content-area">`;
+    html += `<h1 class="text-2xl font-bold mb-6 text-green-700"><i class="fas fa-check-double mr-2"></i>Solution Key</h1>`;
+    
+    html += `<h3>Q1 Answers (Short)</h3><ul class="space-y-4">`;
+    e.shortQs.forEach(q => {
+        html += `<li class="bg-slate-50 p-3 rounded border"><strong>Q: ${q.q}</strong><br><span class="text-slate-600 text-sm mt-1 block">A: ${q.a}</span></li>`;
+    });
+    html += `</ul>`;
+
+    const renderAnswers = (unit, qArray) => {
+        let res = `<h3 class="mt-8">${unit} Answers</h3><div class="space-y-4">`;
+        qArray.forEach(q => {
+            res += `<div class="bg-blue-50 p-4 rounded border border-blue-100"><strong>Q: ${q.q}</strong><br><span class="text-slate-700 mt-2 block">Key Points Required: ${q.a}</span></div>`;
+        });
+        return res + `</div>`;
+    };
+
+    html += renderAnswers('Unit I', e.longQsU1);
+    html += renderAnswers('Unit II', e.longQsU2);
+    html += renderAnswers('Unit III', e.longQsU3);
+    html += renderAnswers('Unit IV', e.longQsU4);
+
+    html += `
+        <div class="mt-8 text-center">
+            <button onclick="navigate('home')" class="bg-slate-800 text-white px-6 py-2 rounded-lg hover:bg-slate-700">Back to Dashboard</button>
+        </div>
+    </div>`;
+
+    document.getElementById('app-content').innerHTML = html;
+}
+
+/* STREAMING_CHUNK:Implementing Flashcards and Progress Tracking... */
+let flashcardIndex = 0;
+let currentFlashcardSet = [];
+
+function renderFlashcards() {
+    currentFlashcardSet = [...DB.flashcards].sort(() => 0.5 - Math.random());
+    flashcardIndex = 0;
+    
+    return `
+        <div class="max-w-2xl mx-auto mt-10">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-3xl font-bold text-slate-800">Flashcards</h1>
+                <div class="text-sm font-bold bg-slate-200 px-3 py-1 rounded-full text-slate-600" id="fc-counter">Card 1 / ${currentFlashcardSet.length}</div>
+            </div>
+            
+            <div class="perspective-1000 w-full h-64 md:h-80 cursor-pointer mb-8" onclick="flipCard()">
+                <div id="flashcard" class="flashcard w-full h-full relative transform-style-3d transition-transform duration-500">
+                    <!-- Front -->
+                    <div class="absolute w-full h-full bg-white rounded-2xl shadow-md border-2 border-blue-100 flex items-center justify-center p-8 backface-hidden z-20">
+                        <h2 id="fc-front" class="text-3xl font-bold text-slate-800 text-center">Term</h2>
+                        <div class="absolute bottom-4 text-slate-400 text-sm"><i class="fas fa-hand-pointer mr-1"></i> Tap to flip</div>
+                    </div>
+                    <!-- Back -->
+                    <div class="absolute w-full h-full bg-blue-50 rounded-2xl shadow-md border-2 border-blue-200 flex items-center justify-center p-8 backface-hidden rotate-y-180 z-10">
+                        <p id="fc-back" class="text-xl text-slate-700 text-center leading-relaxed">Definition</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-center space-x-4">
+                <button onclick="nextCard(false)" class="bg-red-100 text-red-600 hover:bg-red-200 font-bold py-3 px-6 rounded-xl flex-1 transition flex items-center justify-center">
+                    <i class="fas fa-times mr-2"></i> Needs Review
+                </button>
+                <button onclick="nextCard(true)" class="bg-green-100 text-green-600 hover:bg-green-200 font-bold py-3 px-6 rounded-xl flex-1 transition flex items-center justify-center">
+                    <i class="fas fa-check mr-2"></i> Got It
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+function initFlashcardLogic() {
+    updateCardUI();
+}
+
+function flipCard() {
+    document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+function nextCard(knewIt) {
+    if (knewIt) {
+        let term = currentFlashcardSet[flashcardIndex].term;
+        if (!appState.progress.flashcardsMastered.includes(term)) {
+            appState.progress.flashcardsMastered.push(term);
+            saveProgress();
+        }
+    }
+    
+    document.getElementById('flashcard').classList.remove('flipped');
+    
+    setTimeout(() => {
+        flashcardIndex++;
+        if (flashcardIndex >= currentFlashcardSet.length) {
+            showModal("Complete!", "You've reviewed all flashcards in this deck.");
+            flashcardIndex = 0;
+            currentFlashcardSet = [...DB.flashcards].sort(() => 0.5 - Math.random());
+        }
+        updateCardUI();
+    }, 150); // wait for flip animation to partly reset before changing text
+}
+
+function updateCardUI() {
+    document.getElementById('fc-front').innerText = currentFlashcardSet[flashcardIndex].term;
+    document.getElementById('fc-back').innerText = currentFlashcardSet[flashcardIndex].def;
+    document.getElementById('fc-counter').innerText = `Card ${flashcardIndex + 1} / ${currentFlashcardSet.length}`;
+}
+
+// Modal Logic
+function showModal(title, body) {
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('modal-body').innerText = body;
+    document.getElementById('app-modal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('app-modal').classList.add('hidden');
+}
+
+// Search Logic
+document.getElementById('global-search').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        const query = this.value.toLowerCase();
+        if(query.length < 2) return;
+        
+        // Very basic search simulation
+        for(let u of DB.syllabus) {
+            for(let t of u.topics) {
+                if(t.title.toLowerCase().includes(query) || t.content.toLowerCase().includes(query)) {
+                    navigate('topic', t.id);
+                    this.value = '';
+                    return;
+                }
+            }
+        }
+        showModal("Not Found", "Could not find a specific topic matching that term. Try browsing the units.");
+    }
+});
+
+// Initialization
+window.onload = function() {
+    updateProgressUI();
+    navigate('home');
+};
+</script>
+</body>
+</html>
+```eof
+        0 0 30px #0ff;
+      color: #d0e8ff;
+      font-weight: 500;
+    }
+    textarea {
+      background: rgba(10, 25, 35, 0.85);
+      border: 1.5px solid #0ff;
+      color: #d0e8ff;
+      box-shadow:
+        0 0 10px #0ff inset;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    textarea:focus {
+      border-color: #0ff;
+      box-shadow:
+        0 0 20px #0ff inset;
+      outline: none;
+    }
+    label {
+      text-shadow:
+        0 0 5px #0ff;
+    }
+    /* 3D floating animation for the logo */
+    @keyframes float3d {
+      0%, 100% {
+        transform: translateZ(0) translateY(0);
+        filter: drop-shadow(0 0 5px #0ff);
+      }
+      50% {
+        transform: translateZ(20px) translateY(-8px);
+        filter: drop-shadow(0 0 15px #0ff);
+      }
+    }
+    .logo-3d {
+      animation: float3d 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px #0ff);
+      border-radius: 0.5rem;
+      box-shadow:
+        0 0 15px #0ff,
+        0 0 30px #0ff inset;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+    /* Scrollbar styling for results container */
+    #resultsContainer::-webkit-scrollbar {
+      width: 8px;
+    }
+    #resultsContainer::-webkit-scrollbar-track {
+      background: rgba(15, 32, 39, 0.5);
+      border-radius: 4px;
+    }
+    #resultsContainer::-webkit-scrollbar-thumb {
+      background: #0ff;
+      border-radius: 4px;
+    }
+    /* Loading spinner with neon glow */
+    #loadingSection svg {
+      filter: drop-shadow(0 0 10px #0ff);
+    }
+    /* Button icon glow */
+    button i {
+      text-shadow:
+        0 0 5px #0ff,
+        0 0 10px #0ff;
+    }
+  </style>
+ </head>
+ <body>
+  <header class="sticky top-0">
+   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+    <div class="flex items-center space-x-3">
+     <img alt="3D floating logo with letters AI in glowing blue on dark background" class="w-12 h-12 logo-3d" height="80" src="https://storage.googleapis.com/a1aa/image/2f8ab05a-2f42-48b6-9a8c-c53ff5e3121d.jpg" width="80"/>
+     <h1 class="text-3xl font-extrabold text-indigo-400 tracking-wide select-none">
+      AI Research Tool
+     </h1>
+    </div>
+   </div>
+  </header>
+  <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+   <section>
+    <form autocomplete="off" class="mb-8" id="researchForm" spellcheck="false">
+     <label class="block text-lg font-semibold mb-3" for="query">
+      Enter your research topic or query
+     </label>
+     <textarea aria-label="Research query input" autocapitalize="off" autocorrect="off" class="w-full rounded-lg p-4 text-lg leading-relaxed placeholder-indigo-300" id="query" name="query" placeholder="Type your research topic here..." required="" rows="4" spellcheck="false"></textarea>
+     <button aria-label="Start research" class="mt-6 inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-cyan-400 to-blue-600 px-8 py-4 text-white font-bold tracking-wide shadow-lg hover:from-cyan-500 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-cyan-400 focus:ring-opacity-75 transition-transform active:scale-95" type="submit">
+      <i class="fas fa-rocket mr-3 text-xl">
+      </i>
+      Start Research
+     </button>
+    </form>
+   </section>
+   <section aria-atomic="true" aria-live="polite" class="hidden" id="resultsSection">
+    <h2 class="text-2xl font-bold mb-5 flex items-center select-none">
+     <i class="fas fa-file-alt mr-3 text-cyan-400">
+     </i>
+     Research Results
+    </h2>
+    <div aria-label="Research results container" class="max-h-[60vh] overflow-y-auto prose prose-indigo prose-lg" id="resultsContainer" role="region" tabindex="0">
+    </div>
+    <div class="mt-8 flex flex-col sm:flex-row sm:space-x-6 space-y-4 sm:space-y-0 justify-center">
+     <button aria-label="Download results as PDF" class="flex items-center justify-center rounded-lg bg-gradient-to-r from-green-500 to-green-700 px-6 py-3 text-white font-semibold shadow-lg hover:from-green-600 hover:to-green-800 focus:outline-none focus:ring-4 focus:ring-green-400 focus:ring-opacity-75 transition-transform active:scale-95" id="downloadPdfBtn" type="button">
+      <i class="fas fa-file-pdf mr-2 text-lg">
+      </i>
+      Download PDF
+     </button>
+     <button aria-label="Download results as TXT" class="flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-blue-700 px-6 py-3 text-white font-semibold shadow-lg hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-400 focus:ring-opacity-75 transition-transform active:scale-95" id="downloadTxtBtn" type="button">
+      <i class="fas fa-file-alt mr-2 text-lg">
+      </i>
+      Download TXT
+     </button>
+     <button aria-label="Copy results to clipboard" class="flex items-center justify-center rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-700 px-6 py-3 text-white font-semibold shadow-lg hover:from-indigo-600 hover:to-indigo-800 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:ring-opacity-75 transition-transform active:scale-95" id="copyBtn" type="button">
+      <i class="fas fa-copy mr-2 text-lg">
+      </i>
+      Copy to Clipboard
+     </button>
+    </div>
+   </section>
+   <section aria-busy="true" aria-live="assertive" class="hidden mt-12 flex flex-col items-center space-y-6" id="loadingSection" role="alert">
+    <svg aria-hidden="true" class="animate-spin h-14 w-14 text-cyan-400" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+     </circle>
+     <path class="opacity-75" d="M4 12a8 8 0 018-8v8H4z" fill="currentColor">
+     </path>
+    </svg>
+    <p class="text-cyan-400 font-semibold text-xl select-none tracking-wide">
+     Performing in-depth AI research...
+    </p>
+   </section>
+  </main>
+  <footer class="bg-transparent border-t border-cyan-600 py-6 mt-16 text-center text-cyan-400 text-sm select-none">
+   © 2024 AI Research Tool. All rights reserved.
+  </footer>
+  <script>
+   // Simulated async function to mimic querying multiple AI models and sources
+    async function fetchFromModel(modelName, query) {
+      // Simulate variable response times and results
+      const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+      const simulatedDelays = {
+        'Gemini Deep Research': 1800,
+        'ChatGPT': 1500,
+        'Meta AI': 1700,
+        'Claude AI': 1600,
+        'Grok AI': 1400,
+        'DeepSeek-V3': 1300,
+        'Claude-Sonnet-3.7': 1900,
+        'GPT-4o': 2000,
+        'o3-mini': 1200,
+        'DeepSeek-R1': 1100,
+        'Llama-4-Maverick-17B-128E': 2100,
+      };
+      await delay(simulatedDelays[modelName] || 1500);
+
+      // Simulated research snippet for each model
+      const snippets = {
+        'Gemini Deep Research': `Gemini Deep Research found that "${query}" has significant implications in emerging AI technologies, focusing on multi-modal data integration and advanced reasoning.`,
+        'ChatGPT': `ChatGPT highlights that "${query}" is a trending topic with numerous applications in natural language processing and conversational AI.`,
+        'Meta AI': `Meta AI's analysis suggests that "${query}" is pivotal in advancing social AI systems and ethical AI deployment.`,
+        'Claude AI': `Claude AI emphasizes the importance of "${query}" in enhancing AI safety and interpretability.`,
+        'Grok AI': `Grok AI's insights reveal that "${query}" is crucial for real-time AI decision-making and adaptive learning.`,
+        'DeepSeek-V3': `DeepSeek-V3 uncovers that "${query}" is widely researched in the context of deep learning optimization and neural architecture search.`,
+        'Claude-Sonnet-3.7': `Claude-Sonnet-3.7 provides poetic and creative perspectives on "${query}", linking it to AI creativity and generative art.`,
+        'GPT-4o': `GPT-4o delivers a comprehensive overview of "${query}", including recent breakthroughs and future research directions.`,
+        'o3-mini': `o3-mini offers a concise summary of "${query}" with focus on lightweight AI models and edge computing.`,
+        'DeepSeek-R1': `DeepSeek-R1 highlights the role of "${query}" in reinforcement learning and autonomous systems.`,
+        'Llama-4-Maverick-17B-128E': `Llama-4-Maverick-17B-128E provides an in-depth technical analysis of "${query}" with emphasis on large-scale model training and efficiency.`,
+      };
+
+      return {
+        model: modelName,
+        content: snippets[modelName] || `No data available for ${modelName}.`,
+      };
+    }
+
+    // Combine and arrange results in a managed manner
+    function combineResults(results) {
+      // Sort results by model name alphabetically for consistency
+      results.sort((a, b) => a.model.localeCompare(b.model));
+
+      // Create a structured HTML string with headings and paragraphs
+      let combinedHTML = '';
+      results.forEach(({ model, content }) => {
+        combinedHTML += `<h3 class="text-cyan-400 font-semibold mt-6">${model}</h3>`;
+        combinedHTML += `<p class="mt-2 text-gray-200">${content}</p>`;
+      });
+
+      return combinedHTML;
+    }
+
+    // Convert HTML content to plain text for TXT download
+    function htmlToPlainText(html) {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      return tempDiv.textContent || tempDiv.innerText || '';
+    }
+
+    // Generate PDF from HTML content using jsPDF and html2canvas
+    async function generatePDF(htmlContent, title) {
+      // Load jsPDF and html2canvas dynamically
+      if (!window.jspdf) {
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+      }
+      if (!window.html2canvas) {
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+      }
+
+      const { jsPDF } = window.jspdf;
+
+      // Create a container to render the content for canvas
+      const container = document.createElement('div');
+      container.style.width = '600px';
+      container.style.padding = '20px';
+      container.style.background = '#0a1923';
+      container.style.color = '#d0e8ff';
+      container.style.fontFamily = "'Inter', sans-serif";
+      container.style.fontSize = '14px';
+      container.style.lineHeight = '1.5';
+      container.style.borderRadius = '12px';
+      container.innerHTML = htmlContent;
+      document.body.appendChild(container);
+
+      // Use html2canvas to render container to canvas
+      const canvas = await window.html2canvas(container, {
+        scale: 2,
+        backgroundColor: '#0a1923',
+        useCORS: true,
+        scrollY: -window.scrollY,
+      });
+
+      document.body.removeChild(container);
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        unit: 'pt',
+        format: 'a4',
+      });
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`${title.replace(/\s+/g, '_')}_Research.pdf`);
+    }
+
+    // Dynamically load external scripts
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+
+    // Download text file helper
+    function downloadTextFile(filename, text) {
+      const blob = new Blob([text], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Copy text to clipboard helper
+    async function copyToClipboard(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        alert('Results copied to clipboard!');
+      } catch (err) {
+        alert('Failed to copy results. Please copy manually.');
+      }
+    }
+
+    // Main form submit handler
+    document.getElementById('researchForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const query = e.target.query.value.trim();
+      if (!query) return;
+
+      // UI toggles
+      document.getElementById('resultsSection').classList.add('hidden');
+      document.getElementById('loadingSection').classList.remove('hidden');
+
+      // List of AI models/sources to query
+      const models = [
+        'Gemini Deep Research',
+        'ChatGPT',
+        'Meta AI',
+        'Claude AI',
+        'Grok AI',
+        'DeepSeek-V3',
+        'Claude-Sonnet-3.7',
+        'GPT-4o',
+        'o3-mini',
+        'DeepSeek-R1',
+        'Llama-4-Maverick-17B-128E',
+      ];
+
+      // Perform all queries concurrently to optimize time
+      const promises = models.map((model) => fetchFromModel(model, query));
+      let results = [];
+      try {
+        results = await Promise.all(promises);
+      } catch (error) {
+        alert('An error occurred while fetching research data. Please try again.');
+        document.getElementById('loadingSection').classList.add('hidden');
+        return;
+      }
+
+      // Combine and arrange results
+      const combinedHTML = combineResults(results);
+
+      // Show results
+      const resultsContainer = document.getElementById('resultsContainer');
+      resultsContainer.innerHTML = combinedHTML;
+
+      document.getElementById('loadingSection').classList.add('hidden');
+      document.getElementById('resultsSection').classList.remove('hidden');
+      resultsContainer.focus();
+    });
+
+    // Download PDF button handler
+    document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
+      const resultsContainer = document.getElementById('resultsContainer');
+      if (!resultsContainer.innerHTML.trim()) {
+        alert('No results to download.');
+        return;
+      }
+      const title = document.getElementById('query').value.trim() || 'Research';
+      try {
+        await generatePDF(resultsContainer.innerHTML, title);
+      } catch (e) {
+        alert('Failed to generate PDF. Please try again.');
+      }
+    });
+
+    // Download TXT button handler
+    document.getElementById('downloadTxtBtn').addEventListener('click', () => {
+      const resultsContainer = document.getElementById('resultsContainer');
+      if (!resultsContainer.innerHTML.trim()) {
+        alert('No results to download.');
+        return;
+      }
+      const plainText = htmlToPlainText(resultsContainer.innerHTML);
+      const title = document.getElementById('query').value.trim() || 'Research';
+      downloadTextFile(`${title.replace(/\s+/g, '_')}_Research.txt`, plainText);
+    });
+
+    // Copy to clipboard button handler
+    document.getElementById('copyBtn').addEventListener('click', () => {
+      const resultsContainer = document.getElementById('resultsContainer');
+      if (!resultsContainer.innerHTML.trim()) {
+        alert('No results to copy.');
+        return;
+      }
+      const plainText = htmlToPlainText(resultsContainer.innerHTML);
+      copyToClipboard(plainText);
+    });
+  </script>
+ </body>
+</html>
